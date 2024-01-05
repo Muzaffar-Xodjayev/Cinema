@@ -57,3 +57,48 @@ class Movie(models.Model):
 
     def __str__(self):
         return self.title
+
+
+class MovieShot(models.Model):
+    """Scene movies"""
+    title = models.CharField(max_length=100)
+    description = models.TextField()
+    image = models.ImageField(upload_to="movie_shots/")
+    movie = models.ForeignKey(Movie, on_delete=models.CASCADE)
+
+    def __str__(self):
+        return self.title
+
+
+class RatingStar(models.Model):
+    """Star Rating"""
+    value = models.PositiveSmallIntegerField(default=0)
+
+    def __str__(self):
+        return self.value
+
+
+class Rating(models.Model):
+    """Rating"""
+    ip = models.CharField(max_length=25)
+    star = models.ForeignKey(RatingStar, on_delete=models.CASCADE)
+    movie = models.ForeignKey(Movie, on_delete=models.CharField)
+
+    def __str__(self):
+        return f"{self.star} - {self.movie}"
+
+
+class Review(models.Model):
+    """Reviews from users"""
+    email = models.EmailField()
+    name = models.CharField(max_length=100)
+    text = models.TextField(max_length=5000)
+    parent = models.ForeignKey(
+        "self", on_delete=models.SET_NULL, blank=True, null=True
+    )
+    movie = models.ForeignKey(Movie, on_delete=models.CASCADE)
+
+    def __str__(self):
+        return f"{self.name} - {self.movie}"
+
+
