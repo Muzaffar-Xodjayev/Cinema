@@ -3,6 +3,7 @@ from datetime import date
 from django.db import models
 
 # Create your models here.
+from django.urls import reverse
 
 
 class Category(models.Model):
@@ -58,6 +59,9 @@ class Movie(models.Model):
     def __str__(self):
         return self.title
 
+    def get_absolute_url(self):
+        return reverse("movie-detail-page", kwargs={"slug": self.url})
+
 
 class MovieShot(models.Model):
     """Scene movies"""
@@ -100,5 +104,3 @@ class Review(models.Model):
 
     def __str__(self):
         return f"{self.name} - {self.movie}"
-
-
